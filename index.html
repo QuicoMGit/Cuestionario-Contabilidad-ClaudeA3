@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cuestionario — Sistema Claude+A3</title>
+<title>Cuestionario — Asesores con A3</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -44,7 +44,6 @@
     background: var(--bg);
     color: var(--ink);
     min-height: 100vh;
-    /* Evitar zoom al enfocar inputs en iOS */
     -webkit-text-size-adjust: 100%;
     font-size: 16px;
     line-height: 1.6;
@@ -117,7 +116,6 @@
 
   .q-label {
     display: block;
-    /* 16px mínimo para evitar zoom automático en Safari iOS */
     font-size: 16px;
     font-weight: 500;
     color: var(--ink);
@@ -135,14 +133,12 @@
   textarea, input[type="text"] {
     width: 100%;
     font-family: inherit;
-    /* 16px evita el zoom automático de Safari al enfocar */
     font-size: 16px;
     color: var(--ink);
     background: var(--surface);
     border: 1.5px solid var(--border2);
     border-radius: var(--radius-sm);
     padding: 10px 14px;
-    /* Evitar zoom iOS también en el resize */
     -webkit-appearance: none;
     appearance: none;
     transition: border-color 0.15s;
@@ -167,7 +163,6 @@
   }
 
   .chip {
-    /* Área táctil mínima recomendada por Apple: 44px de alto */
     padding: 11px 16px;
     border: 1.5px solid var(--border2);
     border-radius: 100px;
@@ -175,10 +170,8 @@
     color: var(--ink2);
     background: var(--surface);
     cursor: pointer;
-    /* Doble capa: estándar + webkit */
     user-select: none;
     -webkit-user-select: none;
-    /* Eliminar highlight azul en tap iOS */
     -webkit-tap-highlight-color: transparent;
     transition: all 0.15s;
   }
@@ -192,7 +185,6 @@
     font-weight: 500;
   }
 
-  /* Rank list */
   .rank-list {
     display: flex;
     flex-direction: column;
@@ -209,7 +201,6 @@
     border-radius: var(--radius-sm);
     font-size: 15px;
     color: var(--ink);
-    /* touch-action none en el item entero para capturar scroll vs drag */
     cursor: grab;
     -webkit-tap-highlight-color: transparent;
     transition: border-color 0.15s, background 0.15s;
@@ -217,14 +208,12 @@
 
   .rank-item.dragging { opacity: 0.4; }
   .rank-item.drag-over { border-color: var(--accent); background: var(--accent-bg); }
-  .rank-item.touch-active { border-color: var(--accent); background: var(--accent-bg); }
 
   .handle {
     color: var(--ink3);
     font-size: 20px;
     flex-shrink: 0;
     line-height: 1;
-    /* Área táctil ampliada para el handle */
     padding: 4px 6px;
     margin: -4px -6px;
     touch-action: none;
@@ -238,7 +227,6 @@
     flex-shrink: 0;
   }
 
-  /* Nav */
   .nav-row {
     display: flex;
     align-items: center;
@@ -268,7 +256,6 @@
     background: var(--ink);
     border: none;
     border-radius: var(--radius-sm);
-    /* Área táctil Apple-compliant */
     padding: 14px 28px;
     cursor: pointer;
     font-family: inherit;
@@ -280,7 +267,6 @@
   .btn-next:hover { opacity: 0.85; }
   .btn-next:active { opacity: 0.7; }
 
-  /* Done screen */
   .done-wrap { padding: 8px 0; }
   .done-wrap h3 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
   .done-wrap .done-sub { font-size: 15px; color: var(--ink2); line-height: 1.7; margin-bottom: 28px; }
@@ -369,7 +355,6 @@
     word-break: break-word;
     max-height: 200px;
     overflow-y: auto;
-    /* Scroll suave en iOS */
     -webkit-overflow-scrolling: touch;
   }
 
@@ -392,7 +377,7 @@
   @media (max-width: 480px) {
     .page { padding: 28px 16px 80px; }
     .section-title { font-size: 20px; }
-    .btn-next { padding: 14px 24px; width: auto; }
+    .btn-next { padding: 14px 24px; }
   }
 </style>
 </head>
@@ -415,7 +400,7 @@
     <div class="q-block">
       <span class="q-label">¿Cuántas empresas gestionas? ¿Y cuántas facturas mueves al mes entre todas, a grosso modo?</span>
       <span class="q-hint">Una estimación es suficiente</span>
-      <textarea id="t-volumen" placeholder="Por ejemplo: gestiono 12 empresas, entre todas unas 300 facturas al mes..." style="min-height:72px;"></textarea>
+      <textarea id="t-volumen" placeholder="Por ejemplo: 12 empresas, unas 300 facturas al mes..." style="min-height:72px;"></textarea>
     </div>
 
     <div class="q-block">
@@ -455,7 +440,7 @@
     <div class="q-block">
       <span class="q-label">¿Hay algún cliente cuya documentación te complique especialmente la vida?</span>
       <span class="q-hint">Describe cómo te llega y qué es lo que cuesta</span>
-      <textarea id="t-complicado" placeholder="Por ejemplo: me manda un Excel con 200 filas donde cada fila es una línea de factura, no una factura entera..."></textarea>
+      <textarea id="t-complicado" placeholder="Por ejemplo: un Excel con 200 filas donde cada fila es una línea de factura, no una factura entera..."></textarea>
     </div>
 
     <div class="nav-row">
@@ -483,14 +468,14 @@
         <div class="chip" onclick="toggleChip(this)">Movimientos bancarios sin identificar</div>
         <div class="chip" onclick="toggleChip(this)">Documentación que llega tarde</div>
         <div class="chip" onclick="toggleChip(this)">Facturas duplicadas</div>
-        <div class="chip" onclick="toggleChip(this)">Errores al importar en A3</div>
+        <div class="chip" onclick="toggleChip(this)">Asientos que no cuadran</div>
       </div>
     </div>
 
     <div class="q-block">
-      <span class="q-label">Cuando A3 te da un error al importar, ¿qué haces?</span>
-      <span class="q-hint">Cómo lo resuelves normalmente</span>
-      <textarea id="t-errores-a3" placeholder="Por ejemplo: llamo a soporte, lo dejo para más tarde, intento corregirlo yo..." style="min-height:72px;"></textarea>
+      <span class="q-label">Cuando introduces algo en A3 y el resultado no es el que esperabas, ¿cómo lo detectas y qué haces?</span>
+      <span class="q-hint">Por ejemplo: un asiento mal, un IVA que no cuadra...</span>
+      <textarea id="t-errores-a3" placeholder="Por ejemplo: lo veo al cuadrar el trimestre, o me avisa el cliente..." style="min-height:72px;"></textarea>
     </div>
 
     <div class="q-block">
@@ -532,7 +517,7 @@
     </div>
 
     <div class="q-block">
-      <span class="q-label">¿Qué otras tareas crees que también podrían funcionar mejor con una herramienta así?</span>
+      <span class="q-label">¿Qué otras tareas te quitan tiempo regularmente además de las facturas y el banco?</span>
       <span class="q-hint">Selecciona las que apliquen</span>
       <div class="chips" id="chips-tareas">
         <div class="chip" onclick="toggleChip(this)">Declaraciones de IVA (modelo 303)</div>
@@ -560,18 +545,18 @@
   <!-- ── Sección 4 ── -->
   <div class="section" id="s4">
     <div class="section-tag">Tu opinión</div>
-    <div class="section-title">Si pudieras pedir tres mejoras...</div>
+    <div class="section-title">Si pudieras mejorar tu forma de trabajar...</div>
 
     <div class="q-block">
       <span class="q-label">Ordena estas posibles mejoras de más a menos útil para ti</span>
-      <span class="q-hint">Mantén pulsado y arrastra para reordenar. La primera es la que más te ayudaría.</span>
+      <span class="q-hint">Mantén pulsado el icono ⠿ y arrastra para reordenar. La primera es la que más te ayudaría.</span>
       <div class="rank-list" id="rank-list">
-        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">1</span><span>Procesar facturas en Excel (no solo PDF)</span></div>
-        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">2</span><span>Preparar borradores de declaraciones de IVA</span></div>
-        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">3</span><span>Informe mensual automático para el cliente</span></div>
-        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">4</span><span>Aviso cuando un cliente lleva tiempo sin mandar documentación</span></div>
-        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">5</span><span>Seguimiento de facturas pendientes de pago o cobro</span></div>
-        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">6</span><span>Gestión de nóminas integrada</span></div>
+        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">1</span><span>Contabilizar facturas en Excel además de en PDF</span></div>
+        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">2</span><span>Tener un borrador de la declaración de IVA listo antes del cierre</span></div>
+        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">3</span><span>Generar un informe mensual para el cliente sin trabajo manual</span></div>
+        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">4</span><span>Saber qué clientes llevan tiempo sin mandar documentación</span></div>
+        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">5</span><span>Ver de un vistazo qué facturas están pendientes de pago o cobro</span></div>
+        <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">6</span><span>Gestionar nóminas desde el mismo sitio que la contabilidad</span></div>
       </div>
     </div>
 
@@ -633,14 +618,11 @@
   var TU_EMAIL     = 'quicovikingo@gmail.com';         // ej. 'ana@gestoría.com'
   // ────────────────────────────────────────────────────────────────
 
-  // Inyectar email en el fallback
   document.getElementById('fallback-email').textContent = TU_EMAIL;
 
   var resultsText = '';
 
-  function toggleChip(el) {
-    el.classList.toggle('selected');
-  }
+  function toggleChip(el) { el.classList.toggle('selected'); }
 
   function getChips(id) {
     var sel = Array.from(document.querySelectorAll('#' + id + ' .chip.selected'))
@@ -671,7 +653,7 @@
 
   function buildResults() {
     return [
-      'RESPUESTAS — Sistema Claude+A3',
+      'RESPUESTAS — Cuestionario asesores con A3',
       '',
       '— Volumen y configuración —',
       'Volumen (empresas / facturas): ' + getVal('t-volumen'),
@@ -683,11 +665,11 @@
       'Casos complicados: '     + getVal('t-complicado'),
       '',
       '— Dónde se pierde el tiempo —',
-      'Tarea que más tiempo quita: '  + getVal('t-tiempo'),
-      'Errores frecuentes: '          + getChips('chips-errores'),
-      'Qué hace ante errores de A3: ' + getVal('t-errores-a3'),
-      'Facturas especiales: '         + getChips('chips-especiales'),
-      'Clientes complicados: '        + getVal('t-complicados'),
+      'Tarea que más tiempo quita: '   + getVal('t-tiempo'),
+      'Errores frecuentes: '           + getChips('chips-errores'),
+      'Cómo detecta y corrige errores: '+ getVal('t-errores-a3'),
+      'Facturas especiales: '          + getChips('chips-especiales'),
+      'Clientes complicados: '         + getVal('t-complicados'),
       '',
       '— Tareas adicionales —',
       'Cierre trimestral: '       + getChips('chips-trimestre'),
@@ -712,19 +694,15 @@
 
     var formData = new FormData();
     formData.append('respuestas', resultsText);
-    formData.append('_subject', 'Respuestas cuestionario Sistema Claude+A3');
+    formData.append('_subject', 'Respuestas cuestionario asesores A3');
 
     fetch('https://formspree.io/f/' + FORMSPREE_ID, {
       method: 'POST',
       body: formData,
       headers: { 'Accept': 'application/json' }
     })
-    .then(function(res){
-      mostrarDone(res.ok);
-    })
-    .catch(function(){
-      mostrarDone(false);
-    });
+    .then(function(res){ mostrarDone(res.ok); })
+    .catch(function(){ mostrarDone(false); });
   }
 
   function mostrarDone(ok) {
@@ -739,7 +717,6 @@
     }
   }
 
-  // Copiar al portapapeles — compatible con Safari iOS (requiere gesto directo del usuario)
   function copyResults() {
     var msg = document.getElementById('copied-msg');
     var btn = document.getElementById('btn-copy');
@@ -753,7 +730,6 @@
       }, 3000);
     }
 
-    // Método moderno — funciona en Safari iOS 13.4+ si la llamada viene de un gesto
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(resultsText)
         .then(showMsg)
@@ -764,7 +740,6 @@
     fallbackCopy();
 
     function fallbackCopy() {
-      // Fallback para Safari < 13.4 y contextos sin HTTPS
       var ta = document.createElement('textarea');
       ta.value = resultsText;
       ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;';
@@ -778,9 +753,7 @@
     }
   }
 
-  /* ────────────────────────────────────────────────
-     Drag & drop — ratón (escritorio)
-  ──────────────────────────────────────────────── */
+  /* ── Drag & drop — ratón ── */
   var list = document.getElementById('rank-list');
   var dragSrc = null;
 
@@ -808,35 +781,21 @@
     list.insertBefore(dragSrc, after ? target.nextSibling : target);
   });
 
-  /* ────────────────────────────────────────────────
-     Touch — móvil / Safari iOS
-     Estrategia: touch-action:none solo en el handle,
-     así el scroll de página funciona si el usuario
-     toca fuera del handle. El clon usa coordenadas
-     relativas a document para evitar el desfase
-     de viewport cuando aparece el teclado.
-  ──────────────────────────────────────────────── */
+  /* ── Touch — Safari iOS ── */
   var touchItem  = null;
   var touchClone = null;
   var touchOffY  = 0;
   var touchOffX  = 0;
-  var scrollY0   = 0;  // scroll en el momento de touchstart
 
-  // Solo iniciamos el drag si el toque empieza en el handle
   list.addEventListener('touchstart', function(e) {
     var handle = e.target.closest('.handle');
     if (!handle) return;
-
     touchItem = handle.closest('.rank-item');
     if (!touchItem) return;
-
     var t = e.touches[0];
     var r = touchItem.getBoundingClientRect();
-    scrollY0  = window.pageYOffset;
     touchOffY = t.clientY - r.top;
     touchOffX = t.clientX - r.left;
-
-    // Clon visual — posición absoluta en el documento
     touchClone = touchItem.cloneNode(true);
     touchClone.style.cssText = [
       'position:absolute',
@@ -850,7 +809,6 @@
       'box-shadow:0 4px 20px rgba(0,0,0,0.15)'
     ].join(';');
     document.body.appendChild(touchClone);
-
     touchItem.classList.add('dragging');
     e.preventDefault();
   }, { passive: false });
@@ -858,14 +816,8 @@
   list.addEventListener('touchmove', function(e) {
     if (!touchItem || !touchClone) return;
     var t = e.touches[0];
-
-    // Mover el clon siguiendo el dedo (coordenadas absolutas en documento)
-    var newTop  = t.clientY + window.pageYOffset - touchOffY;
-    var newLeft = t.clientX + window.pageXOffset - touchOffX;
-    touchClone.style.top  = newTop  + 'px';
-    touchClone.style.left = newLeft + 'px';
-
-    // Reordenar la lista según posición del dedo en viewport
+    touchClone.style.top  = (t.clientY + window.pageYOffset - touchOffY) + 'px';
+    touchClone.style.left = (t.clientX + window.pageXOffset - touchOffX) + 'px';
     var items = Array.from(list.querySelectorAll('.rank-item:not(.dragging)'));
     var best = null, bestD = Infinity;
     items.forEach(function(el) {
@@ -873,10 +825,7 @@
       var d   = Math.abs(t.clientY - mid);
       if (d < bestD) { bestD = d; best = { el: el, below: t.clientY > mid }; }
     });
-    if (best) {
-      list.insertBefore(touchItem, best.below ? best.el.nextSibling : best.el);
-    }
-
+    if (best) list.insertBefore(touchItem, best.below ? best.el.nextSibling : best.el);
     e.preventDefault();
   }, { passive: false });
 
