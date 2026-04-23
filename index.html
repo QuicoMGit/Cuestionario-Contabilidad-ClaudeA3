@@ -44,6 +44,8 @@
     background: var(--bg);
     color: var(--ink);
     min-height: 100vh;
+    /* Evitar zoom al enfocar inputs en iOS */
+    -webkit-text-size-adjust: 100%;
     font-size: 16px;
     line-height: 1.6;
   }
@@ -115,7 +117,8 @@
 
   .q-label {
     display: block;
-    font-size: 15px;
+    /* 16px mínimo para evitar zoom automático en Safari iOS */
+    font-size: 16px;
     font-weight: 500;
     color: var(--ink);
     margin-bottom: 6px;
@@ -129,26 +132,33 @@
     margin-bottom: 10px;
   }
 
-  textarea {
+  textarea, input[type="text"] {
     width: 100%;
     font-family: inherit;
-    font-size: 15px;
+    /* 16px evita el zoom automático de Safari al enfocar */
+    font-size: 16px;
     color: var(--ink);
     background: var(--surface);
     border: 1.5px solid var(--border2);
     border-radius: var(--radius-sm);
     padding: 10px 14px;
-    resize: vertical;
-    min-height: 88px;
+    /* Evitar zoom iOS también en el resize */
+    -webkit-appearance: none;
+    appearance: none;
     transition: border-color 0.15s;
   }
 
-  textarea:focus {
+  textarea {
+    resize: vertical;
+    min-height: 88px;
+  }
+
+  textarea:focus, input[type="text"]:focus {
     outline: none;
     border-color: var(--accent);
   }
 
-  textarea::placeholder { color: var(--ink3); }
+  textarea::placeholder, input::placeholder { color: var(--ink3); }
 
   .chips {
     display: flex;
@@ -157,16 +167,20 @@
   }
 
   .chip {
-    padding: 8px 16px;
+    /* Área táctil mínima recomendada por Apple: 44px de alto */
+    padding: 11px 16px;
     border: 1.5px solid var(--border2);
     border-radius: 100px;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--ink2);
     background: var(--surface);
     cursor: pointer;
-    transition: all 0.15s;
+    /* Doble capa: estándar + webkit */
     user-select: none;
     -webkit-user-select: none;
+    /* Eliminar highlight azul en tap iOS */
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.15s;
   }
 
   .chip:hover { border-color: var(--accent); color: var(--ink); }
@@ -178,6 +192,7 @@
     font-weight: 500;
   }
 
+  /* Rank list */
   .rank-list {
     display: flex;
     flex-direction: column;
@@ -188,23 +203,42 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
+    padding: 14px 16px;
     background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
-    font-size: 14px;
+    font-size: 15px;
     color: var(--ink);
+    /* touch-action none en el item entero para capturar scroll vs drag */
     cursor: grab;
-    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
     transition: border-color 0.15s, background 0.15s;
   }
 
   .rank-item.dragging { opacity: 0.4; }
   .rank-item.drag-over { border-color: var(--accent); background: var(--accent-bg); }
+  .rank-item.touch-active { border-color: var(--accent); background: var(--accent-bg); }
 
-  .handle { color: var(--ink3); font-size: 18px; flex-shrink: 0; line-height: 1; }
-  .rank-num { font-size: 12px; font-weight: 600; color: var(--ink3); min-width: 20px; flex-shrink: 0; }
+  .handle {
+    color: var(--ink3);
+    font-size: 20px;
+    flex-shrink: 0;
+    line-height: 1;
+    /* Área táctil ampliada para el handle */
+    padding: 4px 6px;
+    margin: -4px -6px;
+    touch-action: none;
+  }
 
+  .rank-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink3);
+    min-width: 20px;
+    flex-shrink: 0;
+  }
+
+  /* Nav */
   .nav-row {
     display: flex;
     align-items: center;
@@ -215,27 +249,31 @@
   }
 
   .btn-back {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--ink3);
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
+    padding: 12px 0;
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .btn-back:hover { color: var(--ink2); }
 
   .btn-next {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--surface);
     background: var(--ink);
     border: none;
     border-radius: var(--radius-sm);
-    padding: 12px 24px;
+    /* Área táctil Apple-compliant */
+    padding: 14px 28px;
     cursor: pointer;
     font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
     transition: opacity 0.15s;
   }
 
@@ -260,7 +298,7 @@
 
   .confirm-box .confirm-icon { font-size: 28px; margin-bottom: 10px; }
   .confirm-box h4 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
-  .confirm-box p { font-size: 14px; color: var(--ink2); line-height: 1.6; }
+  .confirm-box p { font-size: 15px; color: var(--ink2); line-height: 1.6; }
 
   .fallback-box {
     background: var(--surface2);
@@ -269,29 +307,49 @@
     margin-bottom: 12px;
   }
 
-  .fallback-box .fb-title { font-size: 13px; font-weight: 600; color: var(--ink2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
-  .fallback-box .fb-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 12px; }
+  .fallback-box .fb-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink2);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .fallback-box .fb-desc {
+    font-size: 14px;
+    color: var(--ink2);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
 
   .btn-copy {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--ink);
     background: var(--surface);
     border: 1.5px solid var(--border2);
     border-radius: var(--radius-sm);
-    padding: 9px 18px;
+    padding: 13px 20px;
     cursor: pointer;
     font-family: inherit;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    width: 100%;
+    text-align: center;
     transition: all 0.15s;
   }
 
   .btn-copy:hover { border-color: var(--accent); }
+  .btn-copy:active { opacity: 0.7; }
 
   .copied-msg {
-    display: inline-block;
-    font-size: 13px;
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
     color: var(--accent);
-    margin-left: 10px;
+    text-align: center;
     opacity: 0;
     transition: opacity 0.3s;
   }
@@ -304,13 +362,15 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 14px 16px;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--ink3);
     line-height: 1.8;
     white-space: pre-wrap;
     word-break: break-word;
     max-height: 200px;
     overflow-y: auto;
+    /* Scroll suave en iOS */
+    -webkit-overflow-scrolling: touch;
   }
 
   .error-box {
@@ -330,9 +390,9 @@
   }
 
   @media (max-width: 480px) {
-    .page { padding: 28px 16px 60px; }
+    .page { padding: 28px 16px 80px; }
     .section-title { font-size: 20px; }
-    .btn-next { padding: 12px 20px; }
+    .btn-next { padding: 14px 24px; width: auto; }
   }
 </style>
 </head>
@@ -351,6 +411,22 @@
   <div class="section active" id="s1">
     <div class="section-tag">Cómo te llega el trabajo</div>
     <div class="section-title">Las facturas y documentos de tus clientes</div>
+
+    <div class="q-block">
+      <span class="q-label">¿Cuántas empresas gestionas? ¿Y cuántas facturas mueves al mes entre todas, a grosso modo?</span>
+      <span class="q-hint">Una estimación es suficiente</span>
+      <textarea id="t-volumen" placeholder="Por ejemplo: gestiono 12 empresas, entre todas unas 300 facturas al mes..." style="min-height:72px;"></textarea>
+    </div>
+
+    <div class="q-block">
+      <span class="q-label">¿Sabes si tienes estos módulos activos en A3?</span>
+      <span class="q-hint">Selecciona los que tengas. Si no estás seguro, déjalo en blanco.</span>
+      <div class="chips" id="chips-modulos">
+        <div class="chip" onclick="toggleChip(this)">a3 Importador</div>
+        <div class="chip" onclick="toggleChip(this)">a3 Bank</div>
+        <div class="chip" onclick="toggleChip(this)">No lo sé</div>
+      </div>
+    </div>
 
     <div class="q-block">
       <span class="q-label">¿En qué formato te mandan las facturas habitualmente?</span>
@@ -412,6 +488,23 @@
     </div>
 
     <div class="q-block">
+      <span class="q-label">Cuando A3 te da un error al importar, ¿qué haces?</span>
+      <span class="q-hint">Cómo lo resuelves normalmente</span>
+      <textarea id="t-errores-a3" placeholder="Por ejemplo: llamo a soporte, lo dejo para más tarde, intento corregirlo yo..." style="min-height:72px;"></textarea>
+    </div>
+
+    <div class="q-block">
+      <span class="q-label">¿Con qué frecuencia te aparecen facturas rectificativas, abonos o de proveedores europeos?</span>
+      <div class="chips" id="chips-especiales">
+        <div class="chip" onclick="toggleChip(this)">Rectificativas / abonos — pocas</div>
+        <div class="chip" onclick="toggleChip(this)">Rectificativas / abonos — frecuentes</div>
+        <div class="chip" onclick="toggleChip(this)">Intracomunitarias — pocas</div>
+        <div class="chip" onclick="toggleChip(this)">Intracomunitarias — frecuentes</div>
+        <div class="chip" onclick="toggleChip(this)">Casi nunca ninguna de estas</div>
+      </div>
+    </div>
+
+    <div class="q-block">
       <span class="q-label">¿Hay tipos de empresa o cliente especialmente complicados de gestionar?</span>
       <span class="q-hint">Por ejemplo: muchas facturas pequeñas, operaciones intracomunitarias, varios tipos de IVA...</span>
       <textarea id="t-complicados" placeholder=""></textarea>
@@ -427,6 +520,16 @@
   <div class="section" id="s3">
     <div class="section-tag">Más allá de las facturas</div>
     <div class="section-title">Otras tareas que forman parte de tu trabajo</div>
+
+    <div class="q-block">
+      <span class="q-label">El cierre de trimestre — modelo 303, retenciones — ¿cómo lo vives?</span>
+      <div class="chips" id="chips-trimestre">
+        <div class="chip" onclick="toggleChip(this)">Es un momento de mucha presión</div>
+        <div class="chip" onclick="toggleChip(this)">Lo tengo bastante controlado</div>
+        <div class="chip" onclick="toggleChip(this)">Lo hace otro departamento</div>
+        <div class="chip" onclick="toggleChip(this)">No gestiono declaraciones</div>
+      </div>
+    </div>
 
     <div class="q-block">
       <span class="q-label">¿Qué otras tareas crees que también podrían funcionar mejor con una herramienta así?</span>
@@ -461,7 +564,7 @@
 
     <div class="q-block">
       <span class="q-label">Ordena estas posibles mejoras de más a menos útil para ti</span>
-      <span class="q-hint">Arrastra con el ratón o mantén pulsado en móvil para reordenar. La primera es la que más te ayudaría.</span>
+      <span class="q-hint">Mantén pulsado y arrastra para reordenar. La primera es la que más te ayudaría.</span>
       <div class="rank-list" id="rank-list">
         <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">1</span><span>Procesar facturas en Excel (no solo PDF)</span></div>
         <div class="rank-item"><span class="handle">⠿</span><span class="rank-num">2</span><span>Preparar borradores de declaraciones de IVA</span></div>
@@ -502,12 +605,17 @@
 
       <div class="sent-state" id="sent-error">
         <h3>Tus respuestas están listas</h3>
-        <p class="done-sub">Hubo un problema al enviarlas automáticamente. Cópialas y mándamelas tú directamente — con eso es suficiente.</p>
+        <p class="done-sub">Hubo un problema al enviarlas automáticamente. Pulsa el botón, cópialas y mándamelas por WhatsApp o email.</p>
         <div class="fallback-box">
-          <div class="fb-title">Copiar y pegar</div>
-          <div class="fb-desc">Pulsa el botón, luego abre tu email o WhatsApp, pega con <strong>Ctrl+V</strong> (Windows) o <strong>Cmd+V</strong> (Mac) y envía a <strong>TU_EMAIL_AQUI</strong>.</div>
-          <button class="btn-copy" onclick="copyResults()">Copiar respuestas</button>
-          <span class="copied-msg" id="copied-msg">¡Copiado!</span>
+          <div class="fb-title">Copiar y enviar</div>
+          <div class="fb-desc">
+            1. Pulsa el botón de abajo para copiar tus respuestas.<br>
+            2. Abre WhatsApp o tu email.<br>
+            3. Mantén pulsado en el campo de texto → <strong>Pegar</strong>.<br>
+            4. Envía a <strong id="fallback-email">TU_EMAIL_AQUI</strong>.
+          </div>
+          <button class="btn-copy" id="btn-copy" onclick="copyResults()">Copiar respuestas</button>
+          <span class="copied-msg" id="copied-msg">¡Copiado! Ahora pégalo en WhatsApp o email.</span>
         </div>
         <div class="result-preview" id="result-preview"></div>
       </div>
@@ -525,14 +633,24 @@
   var TU_EMAIL     = 'quicovikingo@gmail.com';         // ej. 'ana@gestoría.com'
   // ────────────────────────────────────────────────────────────────
 
+  // Inyectar email en el fallback
+  document.getElementById('fallback-email').textContent = TU_EMAIL;
+
   var resultsText = '';
 
-  function toggleChip(el) { el.classList.toggle('selected'); }
+  function toggleChip(el) {
+    el.classList.toggle('selected');
+  }
 
   function getChips(id) {
     var sel = Array.from(document.querySelectorAll('#' + id + ' .chip.selected'))
                    .map(function(c){ return c.textContent.trim(); });
     return sel.length ? sel.join(', ') : '—';
+  }
+
+  function getVal(id) {
+    var el = document.getElementById(id);
+    return el ? (el.value.trim() || '—') : '—';
   }
 
   function getRank() {
@@ -555,24 +673,31 @@
     return [
       'RESPUESTAS — Sistema Claude+A3',
       '',
+      '— Volumen y configuración —',
+      'Volumen (empresas / facturas): ' + getVal('t-volumen'),
+      'Módulos A3 activos: '            + getChips('chips-modulos'),
+      '',
       '— Cómo llega la documentación —',
-      'Formatos de facturas: '   + getChips('chips-formato'),
-      'Extracto bancario: '      + getChips('chips-banco'),
-      'Casos complicados: '      + (document.getElementById('t-complicado').value.trim() || '—'),
+      'Formatos de facturas: '  + getChips('chips-formato'),
+      'Extracto bancario: '     + getChips('chips-banco'),
+      'Casos complicados: '     + getVal('t-complicado'),
       '',
       '— Dónde se pierde el tiempo —',
-      'Tarea que más tiempo quita: ' + (document.getElementById('t-tiempo').value.trim() || '—'),
-      'Errores frecuentes: '         + getChips('chips-errores'),
-      'Clientes complicados: '        + (document.getElementById('t-complicados').value.trim() || '—'),
+      'Tarea que más tiempo quita: '  + getVal('t-tiempo'),
+      'Errores frecuentes: '          + getChips('chips-errores'),
+      'Qué hace ante errores de A3: ' + getVal('t-errores-a3'),
+      'Facturas especiales: '         + getChips('chips-especiales'),
+      'Clientes complicados: '        + getVal('t-complicados'),
       '',
       '— Tareas adicionales —',
+      'Cierre trimestral: '       + getChips('chips-trimestre'),
       'Otras tareas de interés: ' + getChips('chips-tareas'),
-      'Informes para clientes: '  + (document.getElementById('t-informes').value.trim() || '—'),
+      'Informes para clientes: '  + getVal('t-informes'),
       '',
       '— Prioridades —',
       getRank(),
       '',
-      'Sugerencias libres: ' + (document.getElementById('t-libre').value.trim() || '—')
+      'Sugerencias libres: ' + getVal('t-libre')
     ].join('\n');
   }
 
@@ -595,116 +720,177 @@
       headers: { 'Accept': 'application/json' }
     })
     .then(function(res){
-      document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
-      document.getElementById('s-done').classList.add('active');
-      document.getElementById('prog-label').textContent = 'Completado';
-      if (res.ok) {
-        document.getElementById('sent-ok').style.display = 'block';
-      } else {
-        mostrarFallback();
-      }
+      mostrarDone(res.ok);
     })
     .catch(function(){
-      document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
-      document.getElementById('s-done').classList.add('active');
-      document.getElementById('prog-label').textContent = 'Completado';
-      mostrarFallback();
+      mostrarDone(false);
     });
   }
 
-  function mostrarFallback() {
-    document.getElementById('sent-error').style.display = 'block';
-    document.getElementById('result-preview').textContent = resultsText;
-    var fb = document.querySelector('.fallback-box .fb-desc strong:last-child');
-    if (fb) fb.textContent = TU_EMAIL;
+  function mostrarDone(ok) {
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById('s-done').classList.add('active');
+    document.getElementById('prog-label').textContent = 'Completado';
+    if (ok) {
+      document.getElementById('sent-ok').style.display = 'block';
+    } else {
+      document.getElementById('sent-error').style.display = 'block';
+      document.getElementById('result-preview').textContent = resultsText;
+    }
   }
 
+  // Copiar al portapapeles — compatible con Safari iOS (requiere gesto directo del usuario)
   function copyResults() {
     var msg = document.getElementById('copied-msg');
+    var btn = document.getElementById('btn-copy');
+
     function showMsg() {
       msg.classList.add('show');
-      setTimeout(function(){ msg.classList.remove('show'); }, 2000);
+      btn.textContent = '✓ Copiado';
+      setTimeout(function(){
+        msg.classList.remove('show');
+        btn.textContent = 'Copiar respuestas';
+      }, 3000);
     }
+
+    // Método moderno — funciona en Safari iOS 13.4+ si la llamada viene de un gesto
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(resultsText).then(showMsg).catch(fallbackCopy);
-    } else {
-      fallbackCopy();
+      navigator.clipboard.writeText(resultsText)
+        .then(showMsg)
+        .catch(function() { fallbackCopy(); });
+      return;
     }
+
+    fallbackCopy();
+
     function fallbackCopy() {
+      // Fallback para Safari < 13.4 y contextos sin HTTPS
       var ta = document.createElement('textarea');
       ta.value = resultsText;
-      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none;';
+      ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;';
       document.body.appendChild(ta);
-      ta.focus(); ta.select();
-      try { document.execCommand('copy'); showMsg(); } catch(e){}
+      ta.focus();
+      ta.setSelectionRange(0, ta.value.length);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch(e){}
       document.body.removeChild(ta);
+      if (ok) { showMsg(); }
     }
   }
 
-  /* ── Drag and drop — ratón ── */
+  /* ────────────────────────────────────────────────
+     Drag & drop — ratón (escritorio)
+  ──────────────────────────────────────────────── */
   var list = document.getElementById('rank-list');
   var dragSrc = null;
 
-  list.addEventListener('dragstart', function(e){
+  list.addEventListener('dragstart', function(e) {
     dragSrc = e.target.closest('.rank-item');
+    if (!dragSrc) return;
     dragSrc.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
   });
-  list.addEventListener('dragend', function(){
+
+  list.addEventListener('dragend', function() {
     if (dragSrc) dragSrc.classList.remove('dragging');
-    document.querySelectorAll('.rank-item').forEach(function(el){ el.classList.remove('drag-over'); });
+    list.querySelectorAll('.rank-item').forEach(function(el){ el.classList.remove('drag-over'); });
     updateNums();
+    dragSrc = null;
   });
-  list.addEventListener('dragover', function(e){
+
+  list.addEventListener('dragover', function(e) {
     e.preventDefault();
     var target = e.target.closest('.rank-item');
-    if (target && target !== dragSrc) {
-      document.querySelectorAll('.rank-item').forEach(function(el){ el.classList.remove('drag-over'); });
-      target.classList.add('drag-over');
-      var after = e.clientY > target.getBoundingClientRect().top + target.offsetHeight / 2;
-      list.insertBefore(dragSrc, after ? target.nextSibling : target);
-    }
+    if (!target || target === dragSrc) return;
+    list.querySelectorAll('.rank-item').forEach(function(el){ el.classList.remove('drag-over'); });
+    target.classList.add('drag-over');
+    var after = e.clientY > target.getBoundingClientRect().top + target.offsetHeight / 2;
+    list.insertBefore(dragSrc, after ? target.nextSibling : target);
   });
 
-  /* ── Touch — móvil y Safari ── */
-  var touchItem = null, touchClone = null, touchOffY = 0;
+  /* ────────────────────────────────────────────────
+     Touch — móvil / Safari iOS
+     Estrategia: touch-action:none solo en el handle,
+     así el scroll de página funciona si el usuario
+     toca fuera del handle. El clon usa coordenadas
+     relativas a document para evitar el desfase
+     de viewport cuando aparece el teclado.
+  ──────────────────────────────────────────────── */
+  var touchItem  = null;
+  var touchClone = null;
+  var touchOffY  = 0;
+  var touchOffX  = 0;
+  var scrollY0   = 0;  // scroll en el momento de touchstart
 
-  list.addEventListener('touchstart', function(e){
-    touchItem = e.target.closest('.rank-item');
+  // Solo iniciamos el drag si el toque empieza en el handle
+  list.addEventListener('touchstart', function(e) {
+    var handle = e.target.closest('.handle');
+    if (!handle) return;
+
+    touchItem = handle.closest('.rank-item');
     if (!touchItem) return;
+
     var t = e.touches[0];
     var r = touchItem.getBoundingClientRect();
+    scrollY0  = window.pageYOffset;
     touchOffY = t.clientY - r.top;
+    touchOffX = t.clientX - r.left;
+
+    // Clon visual — posición absoluta en el documento
     touchClone = touchItem.cloneNode(true);
-    touchClone.style.cssText = 'position:fixed;left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;opacity:0.85;pointer-events:none;z-index:9999;margin:0;';
+    touchClone.style.cssText = [
+      'position:absolute',
+      'left:' + (r.left + window.pageXOffset) + 'px',
+      'top:'  + (r.top  + window.pageYOffset) + 'px',
+      'width:' + r.width + 'px',
+      'opacity:0.85',
+      'pointer-events:none',
+      'z-index:9999',
+      'margin:0',
+      'box-shadow:0 4px 20px rgba(0,0,0,0.15)'
+    ].join(';');
     document.body.appendChild(touchClone);
+
     touchItem.classList.add('dragging');
     e.preventDefault();
   }, { passive: false });
 
-  list.addEventListener('touchmove', function(e){
+  list.addEventListener('touchmove', function(e) {
     if (!touchItem || !touchClone) return;
     var t = e.touches[0];
-    touchClone.style.top = (t.clientY - touchOffY) + 'px';
+
+    // Mover el clon siguiendo el dedo (coordenadas absolutas en documento)
+    var newTop  = t.clientY + window.pageYOffset - touchOffY;
+    var newLeft = t.clientX + window.pageXOffset - touchOffX;
+    touchClone.style.top  = newTop  + 'px';
+    touchClone.style.left = newLeft + 'px';
+
+    // Reordenar la lista según posición del dedo en viewport
     var items = Array.from(list.querySelectorAll('.rank-item:not(.dragging)'));
     var best = null, bestD = Infinity;
-    items.forEach(function(el){
+    items.forEach(function(el) {
       var mid = el.getBoundingClientRect().top + el.offsetHeight / 2;
-      var d = Math.abs(t.clientY - mid);
+      var d   = Math.abs(t.clientY - mid);
       if (d < bestD) { bestD = d; best = { el: el, below: t.clientY > mid }; }
     });
-    if (best) list.insertBefore(touchItem, best.below ? best.el.nextSibling : best.el);
+    if (best) {
+      list.insertBefore(touchItem, best.below ? best.el.nextSibling : best.el);
+    }
+
     e.preventDefault();
   }, { passive: false });
 
-  list.addEventListener('touchend', function(){
+  function endTouch() {
     if (touchClone) { document.body.removeChild(touchClone); touchClone = null; }
-    if (touchItem) { touchItem.classList.remove('dragging'); touchItem = null; }
+    if (touchItem)  { touchItem.classList.remove('dragging'); touchItem = null; }
     updateNums();
-  });
+  }
+
+  list.addEventListener('touchend',    endTouch);
+  list.addEventListener('touchcancel', endTouch);
 
   function updateNums() {
-    list.querySelectorAll('.rank-item').forEach(function(el, i){
+    list.querySelectorAll('.rank-item').forEach(function(el, i) {
       el.querySelector('.rank-num').textContent = i + 1;
     });
   }
