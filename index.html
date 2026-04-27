@@ -414,6 +414,17 @@
     </div>
 
     <div class="q-block">
+      <span class="q-label">¿Qué versión de A3 usas?</span>
+      <span class="q-hint">Suele aparecer en la pantalla de inicio de A3, o en Ayuda → Acerca de</span>
+      <div class="chips" id="chips-version-a3">
+        <div class="chip" onclick="toggleChip(this)">a3ASESOR eco</div>
+        <div class="chip" onclick="toggleChip(this)">a3ASESOR con</div>
+        <div class="chip" onclick="toggleChip(this)">a3nom</div>
+        <div class="chip" onclick="toggleChip(this)">No lo sé</div>
+      </div>
+    </div>
+
+    <div class="q-block">
       <span class="q-label">¿Puedes exportar desde A3 el listado de proveedores o clientes a Excel?</span>
       <span class="q-hint">Por ejemplo: todos los proveedores de una empresa con su NIF, nombre y datos de contacto</span>
       <div class="chips" id="chips-exporta-terceros">
@@ -588,6 +599,20 @@
     </div>
 
     <div class="q-block">
+      <span class="q-label">¿Y el cierre de ejercicio — el cierre contable anual?</span>
+      <span class="q-hint">Regularización de PyG, asiento de cierre, apertura del ejercicio siguiente, amortizaciones anuales</span>
+      <div class="chips" id="chips-cierre-ejercicio">
+        <div class="chip" onclick="toggleChip(this)">Lo hago yo directamente en A3</div>
+        <div class="chip" onclick="toggleChip(this)">Uso una hoja Excel de apoyo y luego introduzco en A3</div>
+        <div class="chip" onclick="toggleChip(this)">Lo hace un auditor externo</div>
+        <div class="chip" onclick="toggleChip(this)">Los ajustes del auditor los introduzco yo en A3</div>
+        <div class="chip" onclick="toggleChip(this)">Es la parte del año que más tiempo me lleva</div>
+        <div class="chip" onclick="toggleChip(this)">No gestiono el cierre contable</div>
+      </div>
+      <textarea id="t-cierre-ejercicio" placeholder="¿En qué momento del año lo haces? ¿Cuál es la parte más laboriosa?" style="min-height:64px; margin-top:10px;"></textarea>
+    </div>
+
+    <div class="q-block">
       <span class="q-label">¿Qué otras tareas te quitan tiempo regularmente además de las facturas y el banco?</span>
       <span class="q-hint">Selecciona las que apliquen</span>
       <div class="chips" id="chips-tareas">
@@ -605,6 +630,17 @@
     <div class="q-block">
       <span class="q-label">¿Preparas informes periódicos para tus clientes? ¿Cómo los haces ahora?</span>
       <textarea id="t-informes" placeholder="Por ejemplo: un resumen mensual de ingresos y gastos, o nada de esto..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <span class="q-label">¿Haces seguimiento de cobros o pagos pendientes para tus clientes?</span>
+      <span class="q-hint">Recordatorios de vencimiento, listados de morosos, avisos de facturas sin cobrar...</span>
+      <div class="chips" id="chips-morosidad">
+        <div class="chip" onclick="toggleChip(this)">Sí, lo hago en A3</div>
+        <div class="chip" onclick="toggleChip(this)">Sí, en Excel o de forma manual</div>
+        <div class="chip" onclick="toggleChip(this)">No — no es parte de mi servicio habitual</div>
+        <div class="chip" onclick="toggleChip(this)">Mis clientes me lo piden pero no tengo una forma cómoda de hacerlo</div>
+      </div>
     </div>
 
     <div class="q-block">
@@ -739,6 +775,7 @@
       '— Volumen y configuración —',
       'Volumen (empresas / facturas): ' + getVal('t-volumen'),
       'Módulos A3 activos: '            + getChips('chips-modulos'),
+      'Versión de A3: '                 + getChips('chips-version-a3'),
       'Exporta terceros desde A3: '     + getChips('chips-exporta-terceros'),
       'Detalle exportación terceros: '  + getVal('t-exporta-terceros'),
       '',
@@ -761,8 +798,11 @@
       '',
       '— Tareas adicionales —',
       'Cierre trimestral: '        + getChips('chips-trimestre'),
+      'Cierre de ejercicio: '      + getChips('chips-cierre-ejercicio'),
+      'Detalle cierre de ejercicio: ' + getVal('t-cierre-ejercicio'),
       'Otras tareas de interés: '  + getChips('chips-tareas'),
       'Informes para clientes: '   + getVal('t-informes'),
+      'Seguimiento cobros/morosos: '+ getChips('chips-morosidad'),
       'Delegación en el despacho: '+ getChips('chips-delegacion'),
       '',
       '— Prioridades —',
