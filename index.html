@@ -414,6 +414,18 @@
     </div>
 
     <div class="q-block">
+      <span class="q-label">¿Puedes exportar desde A3 el listado de proveedores o clientes a Excel?</span>
+      <span class="q-hint">Por ejemplo: todos los proveedores de una empresa con su NIF, nombre y datos de contacto</span>
+      <div class="chips" id="chips-exporta-terceros">
+        <div class="chip" onclick="toggleChip(this)">Sí, proveedores</div>
+        <div class="chip" onclick="toggleChip(this)">Sí, clientes</div>
+        <div class="chip" onclick="toggleChip(this)">No lo sé</div>
+        <div class="chip" onclick="toggleChip(this)">No se puede</div>
+      </div>
+      <textarea id="t-exporta-terceros" placeholder="Si puedes, ¿qué campos tiene el fichero que sale? NIF, IBAN, subcuenta contable..." style="min-height:64px; margin-top:10px;"></textarea>
+    </div>
+
+    <div class="q-block">
       <span class="q-label">¿En qué formato te mandan las facturas habitualmente?</span>
       <span class="q-hint">Selecciona todos los que uses</span>
       <div class="chips" id="chips-formato">
@@ -428,12 +440,33 @@
     </div>
 
     <div class="q-block">
+      <span class="q-label">¿Cómo de legibles suelen ser esas facturas?</span>
+      <span class="q-hint">Selecciona la opción más habitual</span>
+      <div class="chips" id="chips-calidad-pdf">
+        <div class="chip" onclick="toggleChip(this)">PDF generado por el software del proveedor (legible siempre)</div>
+        <div class="chip" onclick="toggleChip(this)">Escaneo limpio de papel</div>
+        <div class="chip" onclick="toggleChip(this)">Foto de móvil, a veces borrosa</div>
+        <div class="chip" onclick="toggleChip(this)">Mezcla de todos los anteriores</div>
+      </div>
+    </div>
+
+    <div class="q-block">
       <span class="q-label">¿Y el extracto bancario?</span>
       <div class="chips" id="chips-banco">
         <div class="chip" onclick="toggleChip(this)">Lo descargo yo del banco</div>
         <div class="chip" onclick="toggleChip(this)">El cliente me lo manda</div>
         <div class="chip" onclick="toggleChip(this)">Tengo acceso directo a la cuenta</div>
         <div class="chip" onclick="toggleChip(this)">No gestiono banco</div>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <span class="q-label">En un lote normal de facturas, ¿con qué frecuencia aparece un proveedor o cliente que no has contabilizado nunca antes?</span>
+      <div class="chips" id="chips-terceros-nuevos">
+        <div class="chip" onclick="toggleChip(this)">Casi nunca — la mayoría son los mismos</div>
+        <div class="chip" onclick="toggleChip(this)">Alguno de vez en cuando (1-2 al mes)</div>
+        <div class="chip" onclick="toggleChip(this)">Bastantes (varios a la semana)</div>
+        <div class="chip" onclick="toggleChip(this)">Depende mucho del cliente</div>
       </div>
     </div>
 
@@ -479,6 +512,17 @@
     </div>
 
     <div class="q-block">
+      <span class="q-label">Si detectas el error después de haber cerrado el periodo en A3, ¿qué haces?</span>
+      <div class="chips" id="chips-correccion">
+        <div class="chip" onclick="toggleChip(this)">Lo corrijo directamente en A3 (asiento de corrección)</div>
+        <div class="chip" onclick="toggleChip(this)">Anulo y vuelvo a importar</div>
+        <div class="chip" onclick="toggleChip(this)">Lo dejo para el siguiente periodo</div>
+        <div class="chip" onclick="toggleChip(this)">Llamo al soporte de A3</div>
+        <div class="chip" onclick="toggleChip(this)">Casi nunca me pasa esto</div>
+      </div>
+    </div>
+
+    <div class="q-block">
       <span class="q-label">¿Con qué frecuencia te aparecen facturas rectificativas, abonos o de proveedores europeos?</span>
       <div class="chips" id="chips-especiales">
         <div class="chip" onclick="toggleChip(this)">Rectificativas / abonos — pocas</div>
@@ -486,6 +530,33 @@
         <div class="chip" onclick="toggleChip(this)">Intracomunitarias — pocas</div>
         <div class="chip" onclick="toggleChip(this)">Intracomunitarias — frecuentes</div>
         <div class="chip" onclick="toggleChip(this)">Casi nunca ninguna de estas</div>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <span class="q-label">¿Te llegan facturas con situaciones fiscales especiales?</span>
+      <span class="q-hint">Selecciona las que te sean habituales</span>
+      <div class="chips" id="chips-fiscal-especial">
+        <div class="chip" onclick="toggleChip(this)">Inversión del sujeto pasivo (ISP)</div>
+        <div class="chip" onclick="toggleChip(this)">Importaciones con DUA</div>
+        <div class="chip" onclick="toggleChip(this)">Facturas con dos tipos de IVA distintos</div>
+        <div class="chip" onclick="toggleChip(this)">Suplidos en facturas de profesionales</div>
+        <div class="chip" onclick="toggleChip(this)">Regímenes especiales (REAGP, REBU...)</div>
+        <div class="chip" onclick="toggleChip(this)">Casi nunca ninguna de estas</div>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <span class="q-label">¿Contabilizas nóminas, cuotas de leasing o amortizaciones de inmovilizado?</span>
+      <span class="q-hint">¿Con qué frecuencia y cómo lo haces ahora?</span>
+      <div class="chips" id="chips-asientos-manuales">
+        <div class="chip" onclick="toggleChip(this)">Nóminas — mensualmente</div>
+        <div class="chip" onclick="toggleChip(this)">Leasing — mensualmente</div>
+        <div class="chip" onclick="toggleChip(this)">Amortizaciones — anualmente</div>
+        <div class="chip" onclick="toggleChip(this)">Periodificaciones</div>
+        <div class="chip" onclick="toggleChip(this)">Lo hago directamente en A3</div>
+        <div class="chip" onclick="toggleChip(this)">Tengo una plantilla Excel de apoyo</div>
+        <div class="chip" onclick="toggleChip(this)">No gestiono esto</div>
       </div>
     </div>
 
@@ -534,6 +605,16 @@
     <div class="q-block">
       <span class="q-label">¿Preparas informes periódicos para tus clientes? ¿Cómo los haces ahora?</span>
       <textarea id="t-informes" placeholder="Por ejemplo: un resumen mensual de ingresos y gastos, o nada de esto..."></textarea>
+    </div>
+
+    <div class="q-block">
+      <span class="q-label">En el despacho, ¿cada empresa la lleva siempre la misma persona?</span>
+      <div class="chips" id="chips-delegacion">
+        <div class="chip" onclick="toggleChip(this)">Sí — cada empresa tiene un responsable fijo</div>
+        <div class="chip" onclick="toggleChip(this)">A veces nos cubrimos unos a otros</div>
+        <div class="chip" onclick="toggleChip(this)">Cualquier persona del equipo puede tocar cualquier empresa</div>
+        <div class="chip" onclick="toggleChip(this)">Trabajo solo</div>
+      </div>
     </div>
 
     <div class="nav-row">
@@ -613,7 +694,7 @@
 </div>
 
 <script>
-  // ── CONFIGURACIÓN ── Sustituye estos dos valores antes de publicar
+ // ── CONFIGURACIÓN ── Sustituye estos dos valores antes de publicar
   var FORMSPREE_ID = 'mqewgrwr';   // ej. 'xpzvwkjr'
   var TU_EMAIL     = 'quicovikingo@gmail.com';         // ej. 'ana@gestoría.com'
   // ────────────────────────────────────────────────────────────────
@@ -658,23 +739,31 @@
       '— Volumen y configuración —',
       'Volumen (empresas / facturas): ' + getVal('t-volumen'),
       'Módulos A3 activos: '            + getChips('chips-modulos'),
+      'Exporta terceros desde A3: '     + getChips('chips-exporta-terceros'),
+      'Detalle exportación terceros: '  + getVal('t-exporta-terceros'),
       '',
       '— Cómo llega la documentación —',
-      'Formatos de facturas: '  + getChips('chips-formato'),
-      'Extracto bancario: '     + getChips('chips-banco'),
-      'Casos complicados: '     + getVal('t-complicado'),
+      'Formatos de facturas: '    + getChips('chips-formato'),
+      'Calidad de los PDFs: '     + getChips('chips-calidad-pdf'),
+      'Extracto bancario: '       + getChips('chips-banco'),
+      'Frecuencia terceros nuevos: ' + getChips('chips-terceros-nuevos'),
+      'Casos complicados: '       + getVal('t-complicado'),
       '',
       '— Dónde se pierde el tiempo —',
-      'Tarea que más tiempo quita: '   + getVal('t-tiempo'),
-      'Errores frecuentes: '           + getChips('chips-errores'),
-      'Cómo detecta y corrige errores: '+ getVal('t-errores-a3'),
-      'Facturas especiales: '          + getChips('chips-especiales'),
-      'Clientes complicados: '         + getVal('t-complicados'),
+      'Tarea que más tiempo quita: '      + getVal('t-tiempo'),
+      'Errores frecuentes: '              + getChips('chips-errores'),
+      'Cómo detecta y corrige errores: '  + getVal('t-errores-a3'),
+      'Corrección post-cierre: '          + getChips('chips-correccion'),
+      'Facturas especiales (rect/intra): '+ getChips('chips-especiales'),
+      'Situaciones fiscales especiales: ' + getChips('chips-fiscal-especial'),
+      'Asientos manuales (nóm/leas/amort): ' + getChips('chips-asientos-manuales'),
+      'Clientes complicados: '            + getVal('t-complicados'),
       '',
       '— Tareas adicionales —',
-      'Cierre trimestral: '       + getChips('chips-trimestre'),
-      'Otras tareas de interés: ' + getChips('chips-tareas'),
-      'Informes para clientes: '  + getVal('t-informes'),
+      'Cierre trimestral: '        + getChips('chips-trimestre'),
+      'Otras tareas de interés: '  + getChips('chips-tareas'),
+      'Informes para clientes: '   + getVal('t-informes'),
+      'Delegación en el despacho: '+ getChips('chips-delegacion'),
       '',
       '— Prioridades —',
       getRank(),
